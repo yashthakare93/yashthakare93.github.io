@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, User, Briefcase, Mail, ArrowRight } from 'lucide-react';
+import { Home, User, Briefcase, Mail } from 'lucide-react';
 
-// --- Constants and Child Components (Defined Outside) ---
-
-// Define navigation items as a constant since it doesn't change.
 const navItems = [
   { id: 'home', icon: Home, label: 'Home', href: '#home' },
   { id: 'about', icon: User, label: 'About', href: '#about' },
@@ -12,62 +9,44 @@ const navItems = [
   { id: 'contact', icon: Mail, label: 'Contact', href: '#contact' },
 ];
 
-/**
- * Top Navbar Component
- * Moved outside the main Navbar component.
- * It now receives props for functionality.
- */
-const TopNavbar = ({ onTogglePosition }) => (
+// ========== Desktop Top Navbar ==========
+const TopNavbar = () => (
   <motion.nav
-    // Add exit animation for smooth transition
     exit={{ opacity: 0, y: -20 }}
     initial={{ opacity: 0, y: -20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.3 }}
-    className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50"
+    className="hidden sm:flex fixed top-4 inset-x-0 z-50 justify-center"
   >
-    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full shadow-lg px-4 py-2">
-      <div className="flex items-center justify-center space-x-2">
+    <div className="w-max bg-white/10 backdrop-blur-md border border-white/20 rounded-full shadow-lg px-10 py-4 relative hover:cursor-pointer">
+      <div className="flex items-center gap-6">
         {navItems.map((item) => (
           <motion.a
             key={item.id}
             href={item.href}
             whileHover={{ scale: 1.1 }}
-            className="px-4 py-2 text-white hover:text-blue-400 transition-colors"
+            className="flex items-center gap-2 text-white hover:text-blue-400 transition-colors"
           >
-            <div className="flex items-center space-x-2">
-              <item.icon className="w-4 h-4" />
-              <span className="hidden sm:inline">{item.label}</span>
-            </div>
+            <item.icon className="w-5 h-5" />
+            <span className="hidden sm:inline text-base">{item.label}</span>
           </motion.a>
         ))}
-        <motion.button
-          onClick={() => onTogglePosition('left')}
-          whileHover={{ scale: 1.1 }}
-          className="p-2 bg-blue-500/20 text-blue-400 rounded-full"
-        >
-          {/* Arrow points right, indicating a move to the side */}
-          <ArrowRight className="w-4 h-4" />
-        </motion.button>
       </div>
     </div>
   </motion.nav>
 );
 
-/**
- * Left Navbar Component
- * Also moved outside and receives props.
- */
-const LeftNavbar = ({ onTogglePosition }) => (
+// ========== Desktop Left Sidebar ==========
+const LeftNavbar = () => (
   <motion.nav
     exit={{ opacity: 0, x: -20 }}
     initial={{ opacity: 0, x: -20 }}
     animate={{ opacity: 1, x: 0 }}
     transition={{ duration: 0.3 }}
-    className="fixed left-4 top-1/2 transform -translate-y-1/2 z-50"
+    className="hidden sm:flex fixed top-0 left-4 h-screen items-center z-50"
   >
-    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full shadow-lg p-2">
-      <div className="flex flex-col space-y-2">
+    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full shadow-lg p-4">
+      <div className="flex flex-col items-center gap-6">
         {navItems.map((item) => (
           <motion.a
             key={item.id}
@@ -75,37 +54,67 @@ const LeftNavbar = ({ onTogglePosition }) => (
             whileHover={{ scale: 1.1 }}
             className="p-3 text-white hover:text-blue-400 transition-colors"
           >
-            <item.icon className="w-5 h-5" />
+            <item.icon className="w-6 h-6" />
           </motion.a>
         ))}
-        <motion.button
-          onClick={() => onTogglePosition('top')}
-          whileHover={{ scale: 1.1 }}
-          className="p-3 bg-blue-500/20 text-blue-400 rounded-full"
-        >
-          {/* Arrow points up, indicating a move to the top */}
-          <ArrowRight className="w-5 h-5 -rotate-90" />
-        </motion.button>
       </div>
     </div>
   </motion.nav>
 );
 
+// ========== Mobile Bottom Navbar (Always visible on mobile) ==========
+const BottomNavbarMobile = () => (
+  <motion.nav
+    exit={{ opacity: 0, y: 20 }}
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+    className="sm:hidden fixed bottom-4 inset-x-4 z-50"
+  >
+    <div className="flex justify-between items-center bg-white/10 backdrop-blur-md border border-white/20 rounded-full shadow-lg px-6 py-3">
+      {navItems.map((item) => (
+        <motion.a
+          key={item.id}
+          href={item.href}
+          whileHover={{ scale: 1.1 }}
+          className="text-white hover:text-blue-400 transition-colors"
+        >
+          <item.icon className="w-5 h-5" />
+        </motion.a>
+      ))}
+    </div>
+  </motion.nav>
+);
 
-// --- Main Parent Component ---
-
+// ========== Main Navbar Component ==========
 const Navbar = () => {
-  const [position, setPosition] = useState('top');
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
+
+  useEffect(() => {
+    const hero = document.getElementById('home');
+    if (!hero) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsHeroVisible(entry.isIntersecting),
+      { threshold: 0.5 }
+    );
+
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <AnimatePresence mode="wait">
-      {position === 'top' ? (
-        // Add a unique key to help AnimatePresence
-        <TopNavbar key="top" onTogglePosition={setPosition} />
-      ) : (
-        <LeftNavbar key="left" onTogglePosition={setPosition} />
-      )}
-    </AnimatePresence>
+    <>
+      <AnimatePresence mode="wait">
+        {/* Desktop Center Nav only on hero */}
+        {isHeroVisible && <TopNavbar key="top" />}
+        {/* Desktop Left Nav only on scroll */}
+        {!isHeroVisible && <LeftNavbar key="left" />}
+      </AnimatePresence>
+
+      {/* Mobile Bottom Nav always visible */}
+      <BottomNavbarMobile />
+    </>
   );
 };
 
