@@ -1,7 +1,7 @@
 import React from 'react';
 const Layout = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-black dark:bg-gray-900">
+    <div className="min-h-screen flex flex-col ">
       {/* Main Content */}
       <main className="flex-grow">
         {children}

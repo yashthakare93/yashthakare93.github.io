@@ -37,27 +37,27 @@ const TopNavbar = () => (
 );
 
 // ========== Desktop Left Sidebar ==========
+// ========== Desktop Left Bottom Navbar ==========
+
 const LeftNavbar = () => (
   <motion.nav
     exit={{ opacity: 0, x: -20 }}
     initial={{ opacity: 0, x: -20 }}
     animate={{ opacity: 1, x: 0 }}
     transition={{ duration: 0.3 }}
-    className="hidden sm:flex fixed top-0 left-4 h-screen items-center z-50"
+    className="hidden sm:flex fixed bottom-4 left-4 z-50"
   >
-    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full shadow-lg p-4">
-      <div className="flex flex-col items-center gap-6">
-        {navItems.map((item) => (
-          <motion.a
-            key={item.id}
-            href={item.href}
-            whileHover={{ scale: 1.1 }}
-            className="p-3 text-white hover:text-blue-400 transition-colors"
-          >
-            <item.icon className="w-6 h-6" />
-          </motion.a>
-        ))}
-      </div>
+    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl p-4 flex flex-col items-center gap-4">
+      {navItems.map((item) => (
+        <motion.a
+          key={item.id}
+          href={item.href}
+          whileHover={{ scale: 1.15 }}
+          className="text-white hover:text-cyan-300 transition-colors"
+        >
+          <item.icon className="w-6 h-6" />
+        </motion.a>
+      ))}
     </div>
   </motion.nav>
 );

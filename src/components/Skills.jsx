@@ -45,11 +45,11 @@ const mySkillsList = [
 
 const Skills = () => {
     return (
-        <div className=" h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-4 relative overflow-hidden">
-            <Cursorpointer
+        <div className="h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-4 relative overflow-hidden">
+            {/* <Cursorpointer
                 spinDuration={20}
                 hideDefaultCursor={true}
-            />
+            /> */}
             <div className="relative z-10 flex flex-col items-center text-center">
                 {/* Headline */}
                 <h1 className="text-4xl md:text-5xl font-bold text-teal-300 mb-4 tracking-wider">
