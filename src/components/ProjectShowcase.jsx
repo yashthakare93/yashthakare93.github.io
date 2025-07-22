@@ -185,40 +185,49 @@ const ProjectShowcase = () => {
       : projectsData.projects.filter((project) => project.category === activeFilter);
 
   return (
-    <div className="min-h-screen bg-slate-900 py-12 px-4">
-      <div className="max-w-7xl mx-auto">
-        {/* Heading */}
-        <div className="text-center mb-6">
-          <p className="inline-block bg-cyan-800/30 text-cyan-300 px-5 py-1.5 rounded-full text-sm font-semibold tracking-wide shadow-md">
-            Projects That Reflect My Journey
-          </p>
-          <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white leading-tight">
-            Project Showcase
-          </h2>
-        </div>
+    <section id='projects' className="min-h-screen bg-black py-12 px-4">
+      <div className="relative min-h-screen bg-black text-slate-100 font-sans flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 overflow-hidden">
+        {/* Subtle background glow effect */}
+        <div className="absolute top-1/2 left-1/2 w-[80vw] h-[80vh] max-w-[800px] max-h-[800px] -translate-x-1/2 -translate-y-1/2 bg-indigo-900/40 rounded-full blur-[150px] animate-pulse" />
+        <div className="relative z-10 w-full max-w-7xl">
 
-        {/* Filter */}
-        <div className="flex justify-center gap-4 mb-12">
-          {projectsData.filters.map((filter) => (
-            <FilterButton
-              key={filter}
-              label={filter}
-              isActive={activeFilter === filter}
-              onClick={() => setActiveFilter(filter)}
-            />
-          ))}
-        </div>
 
-        {/* Cards Layout */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 max-w-6xl mx-auto space-y-6">
-          {filteredProjects.map((project) => (
-            <div key={project.id} className="break-inside-avoid">
-              <ProjectCard project={project} />
+
+          <div className="max-w-7xl mx-auto">
+            {/* Heading */}
+            <div className="text-center mb-6">
+              <p className="inline-block bg-cyan-800/30 text-lime-300 px-5 py-1.5 rounded-full text-sm font-semibold tracking-wide shadow-md">
+                Projects That Reflect My Journey
+              </p>
+              <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white leading-tight">
+                Project Showcase
+              </h2>
             </div>
-          ))}
+
+            {/* Filter */}
+            <div className="flex justify-center gap-4 mb-12">
+              {projectsData.filters.map((filter) => (
+                <FilterButton
+                  key={filter}
+                  label={filter}
+                  isActive={activeFilter === filter}
+                  onClick={() => setActiveFilter(filter)}
+                />
+              ))}
+            </div>
+
+            {/* Cards Layout */}
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 max-w-6xl mx-auto space-y-6">
+              {filteredProjects.map((project) => (
+                <div key={project.id} className="break-inside-avoid">
+                  <ProjectCard project={project} />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

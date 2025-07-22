@@ -1,43 +1,57 @@
-import '@fontsource/inter';
-import '@fontsource/playfair-display';
-import DecryptedText from './Decryptedtext';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/700.css';
+import '@fontsource/playfair-display/700.css';
+import ScrollReveal from './ScrollReveal';
 
 const AboutMe = () => {
-const aboutText = `
-Hi, I’m Yash Thakare — a passionate developer from Nagpur who enjoys turning ideas into impactful digital experiences.
+  const aboutText = `
+Hi, I'm Yash — a developer from Nagpur who loves turning ideas into meaningful digital experiences.
 
-My journey in tech has been shaped by curiosity, creativity, and a love for problem-solving. I’ve completed my degree in Computer Engineering from Pune, and I love building side projects — not just to learn, but to create tools that others find genuinely useful.
+With a background in Computer Engineering from Pune, I spend my time building side projects, exploring new tools, and solving real-world problems through code.
 
-I thrive in the process — the midnight debugging sessions, pixel-perfect UI tweaks, and the satisfaction of getting things just right.
-
-Beyond code, you'll often find me journaling, exploring new tools, or sipping chai while sketching out my next idea.
-
-I care deeply about clean code, thoughtful user experiences, and building products that feel intuitive and delightful to use.
+Whether it’s late-night debugging or perfecting a UI, I enjoy the craft. Clean code, smooth UX, and a hot cup of chai — that's my happy place.
 `.trim();
 
-
-
   return (
-    <section className="min-h-screen w-full bg-slate-900 text-white flex items-center justify-center px-6 md:px-12 py-24 font-sans">
-      <div className="max-w-4xl text-center">
-        <div className="text-center mb-6">
-          <p className="inline-block bg-emerald-800/30 text-emerald-300 px-5 py-1.5 rounded-full text-sm font-semibold tracking-wide shadow-md">
-            Get to Know Me Better
-          </p>
-          <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white leading-tight">
-            About Me
-          </h2>
-        </div>
+    <section id='about' className="min-h-screen w-full bg-black antialiased text-white flex items-center justify-center px-4 sm:px-6 py-20">
+      <div className="relative min-h-screen bg-black text-slate-100 font-sans flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 overflow-hidden">
 
+        {/* Background glow */}
+        <div className="absolute top-1/2 left-1/2 w-[80vw] h-[80vh] max-w-[800px] max-h-[800px] -translate-x-1/2 -translate-y-1/2 bg-indigo-900/40 rounded-full blur-[150px] animate-pulse" />
 
-        <div className="text-xl leading-9 text-slate-200 tracking-wide max-w-2xl mx-auto whitespace-pre-line">
-          <DecryptedText
-            text={aboutText}
-            animateOn="view"
-            revealDirection="left"
-            speed={30}
-            maxIterations={25}
-          />
+        <div className="relative z-10 w-full max-w-7xl flex flex-col items-center">
+          {/* Profile Picture */}
+          <div className="mb-6">
+            <img
+              src="src\assets\images\Profile-picture (1).jpg" // Replace with your preferred profile pic URL
+              alt="Yash Thakare"
+              className="w-32 h-32 sm:w-36 sm:h-36 rounded-full border-4 border-lime-400 shadow-lg object-cover"
+            />
+          </div>
+
+          <div className="max-w-5xl w-full text-justify">
+            {/* Section Header */}
+            <div className="text-center mb-8">
+              <p className="inline-block bg-yellow-400/10 text-lime-400 px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium tracking-wide shadow-sm uppercase font-inter">
+                Behind the Code
+              </p>
+              <h2 className="mt-3 text-4xl sm:text-5xl font-playfair-display font-bold text-white leading-tight tracking-tight drop-shadow-md">
+                About Me
+              </h2>
+            </div>
+
+            {/* Animated Text Block */}
+            <div className="text-base leading-relaxed text-slate-300 tracking-wide whitespace-pre-line font-inter">
+              <ScrollReveal
+                baseOpacity={0}
+                enableBlur={true}
+                baseRotation={5}
+                blurStrength={10}
+              >
+                {aboutText}
+              </ScrollReveal>
+            </div>
+          </div>
         </div>
       </div>
     </section>

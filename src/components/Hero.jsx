@@ -1,109 +1,205 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail, Download, ExternalLink } from 'lucide-react';
-import Aurora from './Aurora';
+// Hero.jsx
+import React, { useRef, useEffect } from 'react';
+import { ArrowUpRight } from 'lucide-react';
 import Navbar from './Navbar';
+import { useScroll, useTransform, motion } from 'framer-motion';
+import CardSwap, { Card } from './CardSwap';
+import { Code, Target, BookOpen } from 'lucide-react';
+import { Eye } from 'lucide-react';
+import Lightning from './Lightning';
+const ExternalLinkIcon = () => (
+  <ArrowUpRight className="inline-block h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+);
 
-const skills = [
-  { name: 'React', color: '#61dafb' },
-  { name: 'JavaScript', color: '#f7df1e' },
-  { name: 'Node.js', color: '#3c873a' },
-  { name: 'Next.js', color: '#000' },
-  { name: 'MongoDB', color: '#47A248' },
-];
+
 
 function Hero() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const heroRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const fadeOutOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      const x = (e.clientX / window.innerWidth) * 2 - 1;
-      const y = (e.clientY / window.innerHeight) * 2 - 1;
-      setMousePosition({ x, y });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+    scrollYProgress.onChange((val) => console.log('Scroll progress:', val));
+  }, [scrollYProgress]);
 
-  const imageX = mousePosition.x * 12;
-  const imageY = mousePosition.y * -12;
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2, delayChildren: 0.3 },
+    },
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: 'spring', stiffness: 100, damping: 12 },
+    },
   };
 
+  const socialLinks = [
+    { name: 'LINKEDIN', href: 'https://www.linkedin.com/in/yash-thakare01/' },
+    { name: 'GITHUB', href: 'https://github.com/yashthakare93' },
+    { name: 'INSTAGRAM', href: '#' },
+    { name: 'GMAIL', href: 'mailto:thakareyash74@gmail.com' },
+  ];
+
   return (
-    <section id='home' className="min-h-screen bg-slate-900 text-white font-sans overflow-hidden cursor-default">
-      <Aurora className="absolute top-0 left-0 w-full h-full z-0" colorStops={["#7CFF67", "#B19EEF", "#5227FF"]} blend={0.5} amplitude={1.0} speed={0.5} />
+    <section
+      id="home"
+      ref={heroRef}
+      className="relative flex flex-col min-h-screen w-full justify-between px-6 py-10 md:px-12 lg:px-20  text-white font-sans overflow-hidden"
+    >
       <Navbar />
 
-      <main className="relative w-full h-screen">
+      {/* Lightning Background */}
+      <div className="absolute inset-0 -z-10 pointer-events-none ">
+        <Lightning
+          hue={220}
+          xOffset={0}
+          speed={1}
+          intensity={1}
+          size={1}
+        />
+      </div>
+
+      <motion.div style={{ opacity: fadeOutOpacity }} className="flex flex-col gap-10 pt-20 pl-10">
+
+
         <motion.div
-          className="absolute top-1/2 left-1/2 w-full max-w-7xl -translate-x-1/2 -translate-y-1/2 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16 px-6"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: 'easeInOut', delay: 0.2 }}
+          className="flex items-center gap-2"
+        >
+          <Eye className="w-6 h-6 text-lime-400" />
+          <span className="text-gray-300">Hey! It's me Yash Thakare,</span>
+        </motion.div>
+
+        {/* Text + Cards */}
+        <motion.div
+          className="flex flex-col lg:flex-row items-start justify-between gap-10 w-full"
+          variants={containerVariants}
           initial="hidden"
           animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.3, delayChildren: 0.2 } },
-          }}
         >
-          {/* Text Content */}
-          <motion.div className="text-center lg:text-left lg:w-1/2" variants={itemVariants}>
-            <h2 className="text-lg text-slate-400 mb-2 font-medium">Hello 👋</h2>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tight">
-              I'm <span className="bg-gradient-to-r from-cyan-300 via-indigo-400 to-purple-600 bg-clip-text text-transparent animate-pulse">Yash Thakare</span>
+          {/* Text Section */}
+          <div className="flex-1 max-w-7xl ">
+            <a
+              href="#about"
+              className="group inline-block rounded-full border border-gray-500 px-6 py-2.5 text-sm font-medium text-gray-200 transition-all duration-300 hover:border-white hover:bg-white hover:text-black mb-5"
+            >
+              Know me better <ExternalLinkIcon />
+            </a>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tighter text-balance">
+              <motion.span variants={itemVariants}>
+                Building <span className="text-lime-400">intelligent web</span> applications
+              </motion.span>{" "}
+              <motion.span variants={itemVariants}>
+                and <span className="text-lime-400">smart IoT</span> solutions
+              </motion.span>{" "}
+              <motion.span variants={itemVariants}>
+                that make life easier.
+              </motion.span>
             </h1>
-            <h2 className="text-xl md:text-2xl lg:text-3xl font-medium text-slate-300 mt-4 tracking-wide">
-              PESMCOE Student · Developer · Coder
-            </h2>
-            <p className="text-base md:text-lg text-slate-400 mt-6 max-w-xl mx-auto lg:mx-0 leading-relaxed font-light">
-              I create fast, beautiful websites that put people first. Let’s build something meaningful.
-            </p>
-            <motion.div className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4" variants={itemVariants}>
-              <a
-                href="#projects"
-                className="group bg-gradient-to-r from-cyan-400 to-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:shadow-lg hover:shadow-pink-500/30 transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 w-full sm:w-auto"
-              >
-                <span>Explore Project</span>
-                <ExternalLink className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-              </a>
-              <a
-                href="src/assets/cv/Yash_Thakare_9356978166.pdf"
-                download="Yash_Thakare_Resume.pdf"
-                className="group border-2 border-slate-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-slate-800 hover:border-slate-500 transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 w-full sm:w-auto"
-              >
-                <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
-                <span>Download Resume</span>
-              </a>
-            </motion.div>
-          </motion.div>
 
-          {/* Profile Image without hover effects */}
-          <motion.div
-            className="relative w-72 h-72 lg:w-96 lg:h-96 flex-shrink-0"
-            style={{ transformStyle: 'preserve-3d', transform: `perspective(1000px) rotateY(${imageX}deg) rotateX(${imageY}deg)` }}
-            transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-            variants={{ hidden: { opacity: 0, scale: 0.5 }, visible: { opacity: 1, scale: 1, transition: { duration: 1, type: 'spring' } } }}
-          >
-            <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-slate-700/50 shadow-2xl shadow-slate-900/50">
-              <img src="https://yashthakare.vercel.app/_next/image?url=%2Fprofile-pic.png&w=1920&q=75" alt="Yash" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent" />
+
+          </div>
+
+
+          {/* CardSwap */}
+          <motion.div variants={itemVariants} className="flex-1 w-full">
+            <div className="w-full max-w-xl mx-auto min-h-[480px]">
+              <CardSwap cardDistance={60} verticalDistance={70} height={350} delay={5000} pauseOnHover={false}>
+                {/* Why I Code */}
+                <Card className="p-6 rounded-xl bg-[#1a1a1a] space-y-4 overflow-hidden flex flex-col justify-between">
+                  <div className="space-y-5">
+                    <div className="flex items-center space-x-2">
+                      <Code size={20} className="text-gray-400" />
+                      <h3 className="text-xl font-semibold text-white">Why I Code</h3>
+                    </div>
+                    <ul className="text-gray-300 text-base list-disc list-inside space-y-2">
+                      <li>I love turning ideas into tangible digital solutions.</li>
+                      <li>Solving logical challenges gives me a sense of achievement.</li>
+                      <li>I enjoy the creativity and precision coding demands.</li>
+                      <li>It’s my medium to make a positive impact through tech.</li>
+                    </ul>
+                  </div>
+                  <p className="text-xs text-lime-500 pt-4 italic">
+                    Solving real problems with real code.
+                  </p>
+                </Card>
+
+                {/* My Mission */}
+                <Card className="p-6 rounded-xl bg-[#1a1a1a] space-y-4 overflow-hidden flex flex-col justify-between">
+                  <div className="space-y-5">
+                    <div className="flex items-center space-x-2">
+                      <Target size={20} className="text-gray-400" />
+                      <h3 className="text-xl font-semibold text-white">My Mission</h3>
+                    </div>
+                    <ul className="text-gray-300 text-sm list-disc list-inside space-y-1">
+                      <li>To simplify complex ideas through clear design.</li>
+                      <li>Build tools that are scalable, fast, and user-friendly.</li>
+                      <li>Empower people with intuitive digital experiences.</li>
+                      <li>Create software that solves real-world problems.</li>
+                    </ul>
+                  </div>
+                  <p className="text-xs text-lime-500 pt-4 italic">
+                    Purpose-driven tech solutions, always.
+                  </p>
+                </Card>
+
+                {/* How I Learn */}
+                <Card className="p-6 rounded-xl bg-[#1a1a1a] space-y-4 overflow-hidden flex flex-col justify-between">
+                  <div className="space-y-5">
+                    <div className="flex items-center space-x-2">
+                      <BookOpen size={20} className="text-gray-400" />
+                      <h3 className="text-xl font-semibold text-white">How I Learn</h3>
+                    </div>
+                    <ul className="text-gray-300 text-sm list-disc list-inside space-y-1">
+                      <li>I learn by doing — building projects and prototypes.</li>
+                      <li>Experimentation helps me explore new technologies.</li>
+                      <li>I absorb better through failure and iteration.</li>
+                      <li>Community feedback plays a key role in improvement.</li>
+                    </ul>
+                  </div>
+                  <p className="text-xs text-lime-500 pt-4 italic">
+                    Learning is building, breaking, and evolving.
+                  </p>
+                </Card>
+              </CardSwap>
+
             </div>
           </motion.div>
         </motion.div>
 
-        {/* Social Icons */}
-        <motion.div className="hidden sm:flex absolute bottom-12 right-8 md:right-12 flex-col gap-6 z-40" variants={itemVariants}>
-          {[{ icon: Github, href: 'https://github.com/yashthakare93', label: 'GitHub' },
-          { icon: Linkedin, href: 'https://www.linkedin.com/in/yash-thakare01/', label: 'LinkedIn' },
-          { icon: Mail, href: 'mailto:thakareyash74@gmail.com', label: 'Email' }].map(({ icon: Icon, href, label }) => (
-            <a key={label} href={href} className="group text-slate-400 hover:text-orange-400 transition-colors duration-300" aria-label={label}>
-              <Icon className="w-7 h-7 transform hover:scale-125" />
-            </a>
-          ))}
+        {/* Footer Links */}
+        <motion.div className="flex flex-col items-center justify-center text-center gap-4 sm:flex-row sm:justify-between sm:text-left sm:items-center flex-wrap w-full  px-2">
+          <div className="flex flex-wrap justify-center sm:justify-start items-center gap-4 w-full">
+            {socialLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group text-sm font-bold text-white transition-colors duration-300"
+              >
+                {link.name} <ExternalLinkIcon />
+              </a>
+            ))}
+          </div>
         </motion.div>
-      </main>
+
+      </motion.div>
+      <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-black to-transparent z-10" />
+
     </section>
   );
 }

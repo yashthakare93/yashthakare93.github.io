@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Home, User, Briefcase, Mail } from 'lucide-react';
+import { Settings } from 'lucide-react';
 
 const navItems = [
   { id: 'home', icon: Home, label: 'Home', href: '#home' },
   { id: 'about', icon: User, label: 'About', href: '#about' },
   { id: 'projects', icon: Briefcase, label: 'Projects', href: '#projects' },
+  { id: 'contribution', icon: Mail, label: 'Contribution', href: '#contribution' },
   { id: 'contact', icon: Mail, label: 'Contact', href: '#contact' },
+
 ];
 
 // ========== Desktop Top Navbar ==========
@@ -36,31 +39,47 @@ const TopNavbar = () => (
   </motion.nav>
 );
 
-// ========== Desktop Left Sidebar ==========
-// ========== Desktop Left Bottom Navbar ==========
+// ========== SideToggleNavbar ==========
 
-const LeftNavbar = () => (
-  <motion.nav
-    exit={{ opacity: 0, x: -20 }}
-    initial={{ opacity: 0, x: -20 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ duration: 0.3 }}
-    className="hidden sm:flex fixed bottom-4 left-4 z-50"
-  >
-    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl p-4 flex flex-col items-center gap-4">
-      {navItems.map((item) => (
-        <motion.a
-          key={item.id}
-          href={item.href}
-          whileHover={{ scale: 1.15 }}
-          className="text-white hover:text-cyan-300 transition-colors"
-        >
-          <item.icon className="w-6 h-6" />
-        </motion.a>
-      ))}
-    </div>
-  </motion.nav>
-);
+
+
+const SideToggleNavbar = () => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.nav
+      exit={{ opacity: 0, x: 20 }}
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.3 }}
+      className="hidden sm:flex fixed top-4 right-4 z-50"
+    >
+      <div
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className={`bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl p-2 flex flex-col items-center gap-4 transition-all duration-300 ${isHovered ? 'w-16' : 'w-12'
+          }`}
+      >
+        {!isHovered ? (
+          <Settings className="w-6 h-6 text-white" />
+        ) : (
+          navItems.map((item) => (
+            <motion.a
+              key={item.id}
+              href={item.href}
+              whileHover={{ scale: 1.1 }}
+              className="text-white hover:text-cyan-300 transition-colors"
+            >
+              <item.icon className="w-6 h-6" />
+            </motion.a>
+          ))
+        )}
+      </div>
+    </motion.nav>
+  );
+};
+
+
 
 // ========== Mobile Bottom Navbar (Always visible on mobile) ==========
 const BottomNavbarMobile = () => (
@@ -109,7 +128,7 @@ const Navbar = () => {
         {/* Desktop Center Nav only on hero */}
         {isHeroVisible && <TopNavbar key="top" />}
         {/* Desktop Left Nav only on scroll */}
-        {!isHeroVisible && <LeftNavbar key="left" />}
+        {!isHeroVisible && <SideToggleNavbar key="left" />}
       </AnimatePresence>
 
       {/* Mobile Bottom Nav always visible */}
