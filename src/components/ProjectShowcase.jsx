@@ -188,10 +188,13 @@ const ProjectShowcase = () => {
     <div className="min-h-screen bg-slate-900 py-12 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Heading */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent">
+        <div className="text-center mb-6">
+          <p className="inline-block bg-cyan-800/30 text-cyan-300 px-5 py-1.5 rounded-full text-sm font-semibold tracking-wide shadow-md">
+            Projects That Reflect My Journey
+          </p>
+          <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white leading-tight">
             Project Showcase
-          </h1>
+          </h2>
         </div>
 
         {/* Filter */}
