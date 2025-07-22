@@ -3,6 +3,7 @@ import Hero from '../components/Hero';
 import Skills from '../components/Skills';
 import ProjectShowcase from '../components/ProjectShowcase';
 import GithubContribution from '../components/GithubContribution';
+import Footer from '../components/Footer';
 
 const Home = () => {
   return (
@@ -12,6 +13,7 @@ const Home = () => {
       <Skills />
       <ProjectShowcase />
       <GithubContribution/>
+      <Footer/>
     </div>
   );
 };
